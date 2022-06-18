@@ -122,32 +122,6 @@ function _uuid() {
 */
 export async function solveCode(mongo: MongoManager, code: string) {
 
-    let options = new chrome.Options().addExtensions('./buster_captcha_solver-1.3.1.crx').addArguments('--disable-web-security');
-    const solver = new Captcha.Solver("<Your 2captcha api key>")
-
-    let driver = new Builder()
-        .forBrowser('chrome')
-        .setChromeOptions(options)
-        .build();
-
-    const steps = [optionZero,
-        fiveStars,
-        fiveStars,
-        fiveStars,
-        fiveStars,
-        fiveStars,
-        optionZero,
-        optionOne,
-        optionZero,
-        typeShit,
-        fiveStars,
-        optionOne,
-        optionOne,
-        select,
-        select,
-        optionZero,
-        optionZero
-    ]
     const csrf = _uuid();
     await fetch('https://mcdonalds.fast-insight.com/voc/bs/api/v3/de/checkInvoice', {
         method: 'POST',
@@ -157,6 +131,34 @@ export async function solveCode(mongo: MongoManager, code: string) {
         },
         body: generateJson(code, csrf)
     }).then(res => res.json()).then(async json => {
+        if (json.status!==200) return;
+        let options = new chrome.Options().addExtensions('./buster_captcha_solver-1.3.1.crx').addArguments('--disable-web-security');
+    
+        let driver = new Builder()
+            .forBrowser('chrome')
+            .setChromeOptions(options)
+            .build();
+    
+        const steps = [optionZero,
+            fiveStars,
+            fiveStars,
+            fiveStars,
+            fiveStars,
+            fiveStars,
+            optionZero,
+            optionOne,
+            optionZero,
+            typeShit,
+            fiveStars,
+            optionOne,
+            optionOne,
+            select,
+            select,
+            optionZero,
+            optionZero
+        ]
+
+        console.log(json)
         const url = json.data.meta.url
         await driver.get(url);
         await driver.wait(until.elementLocated(By.xpath('/html/body/section[1]/div/form/div[2]/div[5]')));
@@ -165,7 +167,7 @@ export async function solveCode(mongo: MongoManager, code: string) {
             await step();
             await wait(100);
             await next();
-            await wait(500);
+            await wait(750);
         }
         /*await driver.switchTo().frame(await driver.findElement(By.xpath('/html/body/section[1]/div/form/div/div[1]/div[2]/div/div/iframe')));
         await wait(100);
@@ -198,35 +200,37 @@ export async function solveCode(mongo: MongoManager, code: string) {
         console.log('got code ' + responsecode);
         await mongo.insertCouponCode(code, responsecode)
         driver.close();
+        
+        async function select() {
+            await (await driver.findElement(By.xpath('/html/body/section[1]/div/form/div[2]/div[5]/div/select'))).sendKeys('1');
+        }
+    
+        async function typeShit() {
+            await (await driver.findElement(By.xpath('/html/body/section[1]/div/form/div[2]/div[5]/div/input'))).sendKeys('Allen');
+        }
+    
+        async function optionZero() {
+            await option(0)
+        }
+    
+        async function optionOne() {
+            await option(1)
+        }
+    
+        async function option(index: number) {
+            (await (await driver.findElement(By.xpath('/html/body/section[1]/div/form/div[2]/div[5]'))).findElements(By.className('option')))[index].click();
+        }
+    
+        async function fiveStars() {
+            (await driver.findElement(By.xpath('/html/body/section[1]/div/form/div[2]/div[5]/div/div[1]/div[5]'))).click();
+        }
+    
+        async function next() {
+            (await driver.findElement(By.xpath('//*[@id="next-sbj-btn"]'))).click();
+        }
     })
 
-    async function select() {
-        await (await driver.findElement(By.xpath('/html/body/section[1]/div/form/div[2]/div[5]/div/select'))).sendKeys('1');
-    }
-
-    async function typeShit() {
-        await (await driver.findElement(By.xpath('/html/body/section[1]/div/form/div[2]/div[5]/div/input'))).sendKeys('Allen');
-    }
-
-    async function optionZero() {
-        await option(0)
-    }
-
-    async function optionOne() {
-        await option(1)
-    }
-
-    async function option(index: number) {
-        (await (await driver.findElement(By.xpath('/html/body/section[1]/div/form/div[2]/div[5]'))).findElements(By.className('option')))[index].click();
-    }
-
-    async function fiveStars() {
-        (await driver.findElement(By.xpath('/html/body/section[1]/div/form/div[2]/div[5]/div/div[1]/div[5]'))).click();
-    }
-
-    async function next() {
-        (await driver.findElement(By.xpath('//*[@id="next-sbj-btn"]'))).click();
-    }
+    
 
     //driver.get('https://mcdonalds.fast-insight.com/voc/de/de');
 
@@ -237,6 +241,7 @@ export async function solveCode(mongo: MongoManager, code: string) {
             setTimeout(() => resolve(), ms);
         })
     }
+
 
     function generateJson(code: string, csrf: string) {
         return JSON.stringify({
@@ -266,8 +271,8 @@ const mongo = new MongoManager('mongodb://127.0.0.1:27017')
 mongo.connect().then(async () => {
     while (true) {
         const codes = await mongo.getUnSolved()
-        const index = Math.round(Math.random() * codes.length);
-        console.log('using code: '+codes[index])
+        const index = Math.floor(Math.random() * codes.length);
+        console.log('using code', codes[index])
         await solveCode(mongo, codes[index].survey_code);
     }
 })
