@@ -199,7 +199,7 @@ export async function solveCode(mongo: MongoManager, code: string) {
         const responsecode = (await (await driver.findElement(By.xpath('//*[@id="lblCode1"]'))).getText());
         console.log('got code ' + responsecode);
         await mongo.insertCouponCode(code, responsecode)
-        driver.close();
+        await driver.close();
         
         async function select() {
             await (await driver.findElement(By.xpath('/html/body/section[1]/div/form/div[2]/div[5]/div/select'))).sendKeys('1');
@@ -228,6 +228,8 @@ export async function solveCode(mongo: MongoManager, code: string) {
         async function next() {
             (await driver.findElement(By.xpath('//*[@id="next-sbj-btn"]'))).click();
         }
+    }).catch(() => {
+        
     })
 
     
