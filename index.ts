@@ -19,7 +19,7 @@ function runCheck(agent: any) {
         },
         body: generateJson(code, csrf)
     }).then(res => {
-        res.clone().text().then(res => console.log(res));
+        res.clone()
         res.json().then(async json => {
             runCheck(agent)
             if (json.status === 200) {
@@ -35,7 +35,6 @@ function runCheck(agent: any) {
                         },
                         body: JSON.stringify(params)
                     })
-                    console.log('starting to solve Code');
                 } else {
                     console.log("duplicate detected " + code)
                 }
@@ -94,4 +93,3 @@ function _uuid() {
         return (c === 'x' ? r : r & 0x3 | 0x8).toString(16);
     });
 };
-
