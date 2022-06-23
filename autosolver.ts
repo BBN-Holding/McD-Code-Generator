@@ -131,7 +131,10 @@ export async function solveCode(mongo: MongoManager, code: string) {
         },
         body: generateJson(code, csrf)
     }).then(res => res.json()).then(async json => {
-        if (json.status!==200) return;
+        if (json.status!==200) {
+            await mongo.markInvalid(code);
+            return;
+        }
         let options = new chrome.Options().addExtensions('./buster_captcha_solver-1.3.1.crx').addArguments('--disable-web-security');
     
         let driver = new Builder()

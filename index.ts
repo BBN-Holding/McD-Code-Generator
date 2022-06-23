@@ -19,9 +19,7 @@ function runCheck(agent: any) {
         },
         body: generateJson(code, csrf)
     }).then(res => {
-        res.clone()
         res.json().then(async json => {
-            runCheck(agent)
             if (json.status === 200) {
                 if (await mongo.checkSurveyCode(code)) {
                     await mongo.insertSurveyCode(code)
@@ -39,6 +37,7 @@ function runCheck(agent: any) {
                     console.log("duplicate detected " + code)
                 }
             }
+            runCheck(agent)
         }, () => {
             setTimeout(() => {
                 runCheck(agent)

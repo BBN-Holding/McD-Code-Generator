@@ -20,7 +20,8 @@ export class MongoManager {
             inserted: Date,
             solved: Date | null,
             used: boolean,
-            useddate: Date | null
+            useddate: Date | null,
+            invalid: boolean | null
         }
 
         const Codes: Collection<Code> = this.client.db("McD").collection('codes');
@@ -28,12 +29,13 @@ export class MongoManager {
     }
 
     async markUsed(code: string) {
-        return await this.collection().updateOne({coupon_code: code}, { $set: { used: true, useddate: new Date() } })
+        return await this.collection().updateOne({ coupon_code: code }, { $set: { used: true, useddate: new Date() } })
     }
 
     async getUnSolved() {
         return await this.collection().find({
-            coupon_code: null
+            coupon_code: null,
+            invalid: false
         }).toArray();
     }
 
@@ -51,7 +53,8 @@ export class MongoManager {
             inserted: new Date(),
             solved: null,
             used: false,
-            useddate: null
+            useddate: null,
+            invalid: false
         });
     }
 
@@ -62,8 +65,11 @@ export class MongoManager {
     }
 
     async insertCouponCode(survey_code: string, coupon_code: string) {
-        const query = { survey_code: survey_code }
-        return await this.collection().updateOne(query, { $set: { coupon_code: coupon_code, solved: new Date() } })
+        return await this.collection().updateOne({ survey_code: survey_code }, { $set: { coupon_code: coupon_code, solved: new Date() } })
+    }
+
+    async markInvalid(survey_code: string) {
+        return await this.collection().updateOne({survey_code: survey_code}, {$set: {invalid: true}});
     }
 }
 
