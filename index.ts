@@ -7,8 +7,19 @@ const mongo = new MongoManager('mongodb://172.17.0.4:27017');
 
 const url = 'https://mcdonalds.fast-insight.com/voc/bs/api/v3/de/checkInvoice'
 mongo.connect()
+
+const codeprefixes: string[] = [
+    'b1qfq',
+    'b275c'
+];
+function generateCode() {
+    const codeprefix = codeprefixes[Math.floor(Math.random() * codeprefixes.length)];
+    const code = codeprefix + makeid((12 - codeprefix.length));
+    return `${code.substring(0, 4)}-${code.substring(4, 8)}-${code.substring(8, 12)}`
+}
+
 function runCheck(agent: any) {
-    const code = `b1qf-q${makeid(3)}-${makeid(4)}`
+    const code = generateCode();
     const csrf = _uuid();
     fetch(url, {
         method: 'POST',

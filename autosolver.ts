@@ -131,6 +131,7 @@ export async function solveCode(mongo: MongoManager, code: string) {
         },
         body: generateJson(code, csrf)
     }).then(res => res.json()).then(async json => {
+        console.log(json);
         if (json.status!==200) {
             await mongo.markInvalid(code);
             return;
@@ -276,9 +277,14 @@ const mongo = new MongoManager('mongodb://127.0.0.1:27017')
 mongo.connect().then(async () => {
     while (true) {
         const codes = await mongo.getUnSolved()
+        if (codes.length>0) {
         const index = Math.floor(Math.random() * codes.length);
         console.log('using code', codes[index])
         await solveCode(mongo, codes[index].survey_code);
+        } else {
+            console.log('no codes left');
+            return;
+        }
     }
 })
 
