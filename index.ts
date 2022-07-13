@@ -10,9 +10,7 @@ const url = 'https://mcdonalds.fast-insight.com/voc/bs/api/v3/de/checkInvoice'
 mongo.connect()
 
 const codeprefixes: string[] = [
-    'b1qfq',
-    'b275c',
-    'b9e4xd5'
+    'b1qf2f',
 ];
 function generateCode() {
     const codeprefix = codeprefixes[Math.floor(Math.random() * codeprefixes.length)];

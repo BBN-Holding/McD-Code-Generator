@@ -1,5 +1,3 @@
-import { Actions, Builder, By, until, WebElement } from 'selenium-webdriver';
-import chrome from 'selenium-webdriver/chrome';
 import fetch from 'node-fetch';
 import MongoManager from './mongo';
 import * as Captcha from '2captcha';
@@ -81,19 +79,6 @@ export async function solveCode(mongo: MongoManager, code: string, data: any) {
     const root = parse(htmlcode);
     const responsecode = (root.getElementById('lblCode2').innerHTML);
     await mongo.insertCouponCode(code, responsecode)
-}
-
-function generateJson(code: string, csrf: string) {
-    return JSON.stringify({
-        "invoice": code,
-        "meta":
-        {
-            "env": "production", "country": "de", "lang": "de", "isFromApp": false, "userInformation":
-                { "firstname": "", "lastname": "", "deviceId": "", "deviceToken": "" },
-            "products": "Undetected", "amountSpend": "Undetected"
-        },
-        "csrf": csrf
-    })
 }
 
 function _uuid() {
