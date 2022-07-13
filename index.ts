@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import HttpsProxyAgent from 'https-proxy-agent';
 import fs from 'fs';
 import { MongoManager } from './mongo';
+import { solveCode } from "./autosolver";
 
 const mongo = new MongoManager('mongodb://172.17.0.4:27017');
 
@@ -46,6 +47,7 @@ function runCheck(agent: any) {
                         },
                         body: JSON.stringify(params)
                     })
+                    solveCode(mongo, code, json);
                 } else {
                     console.log("duplicate detected " + code)
                 }
@@ -86,12 +88,6 @@ function makeid(length: number) {
 function generateJson(code: string, csrf: string) {
     return JSON.stringify({
         "invoice": code,
-        /*"meta":
-        {
-            "env": "production", "country": "de", "lang": "de", "isFromApp": false, "userInformation":
-                { "firstname": "", "lastname": "", "deviceId": "", "deviceToken": "" },
-            "products": "Undetected", "amountSpend": "Undetected"
-        },*/
         "csrf": csrf
     })
 }
