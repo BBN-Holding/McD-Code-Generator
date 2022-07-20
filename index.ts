@@ -88,21 +88,7 @@ function generateJson(code: string, csrf: string) {
 
     return JSON.stringify({
         "invoice": code,
-        "csrf": csrf,
-        "meta": {
-            "env": "production",
-            "country": "de",
-            "lang": "de",
-            "isFromApp": false,
-            "userInformation": {
-                "firstname": "",
-                "lastname": "",
-                "deviceId": "",
-                "deviceToken": ""
-            },
-            "products": "Undetected",
-            "amountSpend": "Undetected"
-        }
+        "csrf": csrf
     })
 }
 
