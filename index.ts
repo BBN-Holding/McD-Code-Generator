@@ -87,7 +87,10 @@ function makeid(length: number) {
 function generateJson(code: string, csrf: string) {
     return JSON.stringify({
         "invoice": code,
-        "csrf": csrf
+        "csrf": csrf,
+        "meta": {
+            "country": "de"
+        }
     })
 }
 
