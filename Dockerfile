@@ -1,7 +1,6 @@
 FROM node:18
 WORKDIR /app/
 COPY ./ ./
-RUN npm install
+RUN npm i
 
 CMD ["npx","ts-node","index.ts"]
-

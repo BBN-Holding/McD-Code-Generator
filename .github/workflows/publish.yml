@@ -21,12 +21,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Preparing Project
-        run: npm i
-
-      - name: Building Project
-        run: npm run build
-
       - name: Copy folder content recursively to remote
         uses: garygrossgarten/github-action-scp@release
         with:
