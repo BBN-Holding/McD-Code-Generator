@@ -14,7 +14,7 @@ const codeprefixes: string[] = [
     'b1qf3cg7'
 ];
 function generateCode() {
-    const codeprefix = codeprefixes[Math.floor(Math.random() * codeprefixes.length)];
+    const codeprefix = codeprefixes[ Math.floor(Math.random() * codeprefixes.length) ];
     const code = codeprefix + makeid((12 - codeprefix.length));
     return `${code.substring(0, 4)}-${code.substring(4, 8)}-${code.substring(8, 12)}`
 }
@@ -85,11 +85,23 @@ function makeid(length: number) {
 }
 
 function generateJson(code: string, csrf: string) {
+
     return JSON.stringify({
         "invoice": code,
         "csrf": csrf,
         "meta": {
-            "country": "de"
+            "env": "production",
+            "country": "de",
+            "lang": "de",
+            "isFromApp": false,
+            "userInformation": {
+                "firstname": "",
+                "lastname": "",
+                "deviceId": "",
+                "deviceToken": ""
+            },
+            "products": "Undetected",
+            "amountSpend": "Undetected"
         }
     })
 }
