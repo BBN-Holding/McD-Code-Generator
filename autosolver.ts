@@ -78,6 +78,16 @@ export async function solveCode(mongo: MongoManager, code: string, data: any) {
     const htmlcode = await final.text();
     const root = parse(htmlcode);
     const responsecode = (root.getElementById('lblCode2').innerHTML);
+    const params = {
+        content: "Code solved: " + responsecode
+    }
+    fetch("https://discord.com/api/webhooks/761639838084497487/VrHNINGED2Ay_-Zy1Pz5lEVLuYSnn_aozMSM2RrR726nqdj00DtRYub3M3p9eXA4EkvG", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+    })
     await mongo.insertCouponCode(code, responsecode)
 }
 

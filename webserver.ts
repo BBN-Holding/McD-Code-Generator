@@ -18,6 +18,16 @@ import MongoManager from './mongo';
     app.get('/mark/:code', async (req, res) => {
         console.log(req.params.code)
         await mongo.markUsed(req.params.code);
+        const params = {
+            content: "Code used: " + req.params.code
+        }
+        fetch("https://discord.com/api/webhooks/761639838084497487/VrHNINGED2Ay_-Zy1Pz5lEVLuYSnn_aozMSM2RrR726nqdj00DtRYub3M3p9eXA4EkvG", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params)
+        })
         res.send();
     })
 
