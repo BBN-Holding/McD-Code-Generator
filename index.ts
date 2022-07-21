@@ -11,7 +11,8 @@ mongo.connect()
 
 const codeprefixes: string[] = [
     'b1qf3c',
-    'b1qf3cg7'
+    'b1qf',
+    'b1qf3t'
 ];
 function generateCode() {
     const codeprefix = codeprefixes[ Math.floor(Math.random() * codeprefixes.length) ];
