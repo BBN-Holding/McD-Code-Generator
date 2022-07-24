@@ -8,14 +8,13 @@ import MongoManager from './mongo';
 
     const app = expressws(express()).app;
 
-
     app.use(express.static('./public'));
 
     app.get('/getcodes/', async (req, res) => {
         res.send(await mongo.getUnusedCodes());
     })
 
-    app.get('/mark/:code', async (req, res) => {
+    app.patch('/mark/:code', async (req, res) => {
         console.log(req.params.code)
         await mongo.markUsed(req.params.code);
         const params = {
@@ -36,6 +35,19 @@ import MongoManager from './mongo';
         const code = codes[Math.floor(Math.random()*codes.length)] as any;
         code['count'] = codes.length;
         res.send(code);
+    })
+
+    app.post('/newcode/:code', async (req, res) => {
+        const params = {
+            content: "New code: " + req.params.code
+        }
+        fetch("https://discord.com/api/webhooks/761639838084497487/VrHNINGED2Ay_-Zy1Pz5lEVLuYSnn_aozMSM2RrR726nqdj00DtRYub3M3p9eXA4EkvG", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params)
+        })
     })
 
     app.listen(1337);
