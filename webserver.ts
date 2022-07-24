@@ -15,7 +15,6 @@ import MongoManager from './mongo';
     })
 
     app.patch('/mark/:code', async (req, res) => {
-        console.log(req.params.code)
         await mongo.markUsed(req.params.code);
         const params = {
             content: "Code used: " + req.params.code
@@ -48,6 +47,7 @@ import MongoManager from './mongo';
             },
             body: JSON.stringify(params)
         })
+        res.send();
     })
 
     app.listen(1337);
