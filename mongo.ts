@@ -31,7 +31,7 @@ export class MongoManager {
 
     async getUnusedCodes() {
         return await this.collection().find({
-            used: {$ne:null},
+            used: null,
             coupon_code: {$ne:null}
         }).toArray()
     }
