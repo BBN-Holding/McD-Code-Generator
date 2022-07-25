@@ -14,7 +14,9 @@ refetchCode()
 
 document.getElementById('used').addEventListener('click', () => {
     const code = document.getElementById('qrimg').src.replace(baseqrurl, '');
-    fetch((document.URL + 'mark/'+code)).then(() => {
+    fetch(document.URL + 'mark/' + code, {
+        method: "PATCH"
+    }).then(() => {
         refetchCode();
     })
 })

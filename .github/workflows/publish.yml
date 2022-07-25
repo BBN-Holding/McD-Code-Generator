@@ -1,0 +1,41 @@
+name: Deploy to Server
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build and Publish to Server
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Copy folder content recursively to remote
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./
+          remote: /root/mcdonalds/
+          host: ${{ secrets.WORKER_HOST }}
+          port: ${{ secrets.WORKER_PORT }}
+          username: ${{ secrets.WORKER_USERNAME }}
+          password: ${{ secrets.WORKER_PASSWORD }}
+
+      - name: Deploying to Docker
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.WORKER_HOST }}
+          username: ${{ secrets.WORKER_USERNAME }}
+          password: ${{ secrets.WORKER_PASSWORD }}
+          port: ${{ secrets.WORKER_PORT }}
+          script: /root/mcdonalds/deploy.sh

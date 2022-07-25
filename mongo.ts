@@ -1,6 +1,5 @@
 import { Collection, MongoClient } from 'mongodb';
 
-
 export class MongoManager {
 
     client: MongoClient;
@@ -19,8 +18,7 @@ export class MongoManager {
             coupon_code: string | null,
             inserted: Date,
             solved: Date | null,
-            used: boolean,
-            useddate: Date | null
+            used: Date | null
         }
 
         const Codes: Collection<Code> = this.client.db("McD").collection('codes');
@@ -28,12 +26,12 @@ export class MongoManager {
     }
 
     async markUsed(code: string) {
-        return await this.collection().updateOne({ coupon_code: code }, { $set: { used: true, useddate: new Date() } })
+        return await this.collection().updateOne({ coupon_code: code }, { $set: { used: new Date() } })
     }
 
     async getUnusedCodes() {
         return await this.collection().find({
-            used: false,
+            used: null,
             coupon_code: {$ne:null}
         }).toArray()
     }
@@ -44,8 +42,7 @@ export class MongoManager {
             coupon_code: null,
             inserted: new Date(),
             solved: null,
-            used: false,
-            useddate: null
+            used: null
         });
     }
 

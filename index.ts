@@ -10,11 +10,12 @@ const url = 'https://mcdonalds.fast-insight.com/voc/bs/api/v3/de/checkInvoice'
 mongo.connect()
 
 const codeprefixes: string[] = [
-    'b1qf3y',
-    'b1qf3yki'
+    'b1qf3k5',
+    'b1qf3t',
+    'b1qf3c'
 ];
 function generateCode() {
-    const codeprefix = codeprefixes[Math.floor(Math.random() * codeprefixes.length)];
+    const codeprefix = codeprefixes[ Math.floor(Math.random() * codeprefixes.length) ];
     const code = codeprefix + makeid((12 - codeprefix.length));
     return `${code.substring(0, 4)}-${code.substring(4, 8)}-${code.substring(8, 12)}`
 }
@@ -37,7 +38,7 @@ function runCheck(agent: any) {
                 if (await mongo.checkSurveyCode(code)) {
                     await mongo.insertSurveyCode(code)
                     const params = {
-                        content: code
+                        content: "Code found: " + code
                     }
                     fetch("https://discord.com/api/webhooks/761639838084497487/VrHNINGED2Ay_-Zy1Pz5lEVLuYSnn_aozMSM2RrR726nqdj00DtRYub3M3p9eXA4EkvG", {
                         method: 'POST',
@@ -85,6 +86,7 @@ function makeid(length: number) {
 }
 
 function generateJson(code: string, csrf: string) {
+
     return JSON.stringify({
         "invoice": code,
         "csrf": csrf
