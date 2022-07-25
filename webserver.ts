@@ -3,7 +3,7 @@ import express from 'express';
 import MongoManager from './mongo';
 
 (async () => {
-    const mongo = new MongoManager('mongodb://172.17.0.4:27017');
+    const mongo = new MongoManager('mongodb://mongodb:27017');
     await mongo.connect()
 
     const app = expressws(express()).app;

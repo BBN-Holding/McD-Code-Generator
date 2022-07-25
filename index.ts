@@ -4,7 +4,7 @@ import fs from 'fs';
 import { MongoManager } from './mongo';
 import { solveCode } from "./autosolver";
 
-const mongo = new MongoManager('mongodb://172.17.0.4:27017');
+const mongo = new MongoManager('mongodb://mongodb:27017');
 
 const url = 'https://mcdonalds.fast-insight.com/voc/bs/api/v3/de/checkInvoice'
 mongo.connect()
