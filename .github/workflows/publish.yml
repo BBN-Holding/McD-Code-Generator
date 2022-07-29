@@ -29,7 +29,7 @@ jobs:
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
           username: ${{ secrets.USERNAME }}
-          publicKey: ${{ secrets.KEY }}
+          privateKey: ${{ secrets.KEY }}
 
       - name: Deploying to Docker
         uses: appleboy/ssh-action@master
