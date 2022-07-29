@@ -26,16 +26,16 @@ jobs:
         with:
           local: ./
           remote: /root/mcdonalds/
-          host: ${{ secrets.WORKER_HOST }}
-          port: ${{ secrets.WORKER_PORT }}
-          username: ${{ secrets.WORKER_USERNAME }}
-          password: ${{ secrets.WORKER_PASSWORD }}
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USERNAME }}
+          publicKey: ${{ secrets.KEY }}
 
       - name: Deploying to Docker
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.WORKER_HOST }}
-          username: ${{ secrets.WORKER_USERNAME }}
-          password: ${{ secrets.WORKER_PASSWORD }}
-          port: ${{ secrets.WORKER_PORT }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
           script: /root/mcdonalds/deploy.sh
