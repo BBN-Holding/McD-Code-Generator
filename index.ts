@@ -15,7 +15,7 @@ const codeprefixes: string[] = [
     'b1qf3c'
 ];
 function generateCode() {
-    const codeprefix = codeprefixes[ Math.floor(Math.random() * codeprefixes.length) ];
+    const codeprefix = codeprefixes[Math.floor(Math.random() * codeprefixes.length)];
     const code = codeprefix + makeid((12 - codeprefix.length));
     return `${code.substring(0, 4)}-${code.substring(4, 8)}-${code.substring(8, 12)}`
 }
@@ -67,19 +67,19 @@ getProxies()
 
 async function getProxies() {
     setInterval(async () => {
-        if ((await mongo.getUnusedCodes()).length>100) {
+        if ((await mongo.getUnusedCodes()).length > 100) {
             console.log("too many unused codes");
             process.exit(0);
         }
     }, 10000);
-    
-    const proxies = fs.readFileSync('proxies.txt').toString().split('\n');
-    console.log(`loaded ${proxies.length} proxies`)
-    proxies.forEach(async (proxy: any) => {
-        const agent = HttpsProxyAgent('http://' + proxy);
-        runCheck(agent);
-    });
-
+    if ((await mongo.getUnusedCodes()).length < 100) {
+        const proxies = fs.readFileSync('proxies.txt').toString().split('\n');
+        console.log(`loaded ${proxies.length} proxies`)
+        proxies.forEach(async (proxy: any) => {
+            const agent = HttpsProxyAgent('http://' + proxy);
+            runCheck(agent);
+        });
+    }
 }
 
 function makeid(length: number) {
