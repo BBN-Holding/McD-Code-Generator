@@ -64,7 +64,15 @@ function runCheck(agent: any) {
 }
 
 getProxies()
+
 async function getProxies() {
+    setInterval(async () => {
+        if ((await mongo.getUnusedCodes()).length>100) {
+            console.log("too many unused codes");
+            process.exit(0);
+        }
+    }, 10000);
+    
     const proxies = fs.readFileSync('proxies.txt').toString().split('\n');
     console.log(`loaded ${proxies.length} proxies`)
     proxies.forEach(async (proxy: any) => {
