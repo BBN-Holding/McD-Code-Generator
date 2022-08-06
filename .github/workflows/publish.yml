@@ -27,6 +27,7 @@ jobs:
           remote: /root/mcdonalds/
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
+          concurrency: 5
           username: ${{ secrets.USERNAME }}
           privateKey: ${{ secrets.KEY }}
 
