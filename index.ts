@@ -9,11 +9,7 @@ const mongo = new MongoManager('mongodb://mongo:27017');
 const url = 'https://mcdonalds.fast-insight.com/voc/bs/api/v3/de/checkInvoice'
 mongo.connect()
 
-const codeprefixes: string[] = [
-    'b1qf3k5',
-    'b1qf3t',
-    'b1qf3c'
-];
+let codeprefixes: string[];
 function generateCode() {
     const codeprefix = codeprefixes[Math.floor(Math.random() * codeprefixes.length)];
     const code = codeprefix + makeid((12 - codeprefix.length));
@@ -71,8 +67,10 @@ async function getProxies() {
             console.log("too many unused codes");
             process.exit(0);
         }
+        codeprefixes = (await mongo.getTemplates()).map(t => t.code);
     }, 10000);
     if ((await mongo.getUnusedCodes()).length < 100) {
+        codeprefixes = (await mongo.getTemplates()).map(t => t.code);
         const proxies = fs.readFileSync('proxies.txt').toString().split('\n');
         console.log(`loaded ${proxies.length} proxies`)
         proxies.forEach(async (proxy: any) => {
@@ -94,7 +92,6 @@ function makeid(length: number) {
 }
 
 function generateJson(code: string, csrf: string) {
-
     return JSON.stringify({
         "invoice": code,
         "csrf": csrf
