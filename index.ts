@@ -19,6 +19,7 @@ function generateCode() {
 function runCheck(agent: any) {
     const code = generateCode();
     const csrf = _uuid();
+    const starttime = Date.now();
     fetch(url, {
         method: 'POST',
         agent: agent,
@@ -29,7 +30,7 @@ function runCheck(agent: any) {
         body: generateJson(code, csrf)
     }).then(res => {
         res.json().then(async json => {
-            console.log(code, json);
+            console.log(code, json, Date.now()-starttime+'ms');
             if (json.status === 200) {
                 if (await mongo.checkSurveyCode(code)) {
                     await mongo.insertSurveyCode(code)
@@ -52,7 +53,7 @@ function runCheck(agent: any) {
         }, () => {
             setTimeout(() => {
                 runCheck(agent)
-            }, 30000)
+            }, 15000)
         })
     }, () => {
         runCheck(agent);
