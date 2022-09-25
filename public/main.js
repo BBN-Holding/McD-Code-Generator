@@ -10,13 +10,23 @@ function refetchCode() {
     })
 }
 
-refetchCode()
+navigator.geolocation.getCurrentPosition((position) => {
+    refetchCode()
 
-document.getElementById('used').addEventListener('click', () => {
-    const code = document.getElementById('qrimg').src.replace(baseqrurl, '');
-    fetch(document.URL + 'mark/' + code, {
-        method: "PATCH"
-    }).then(() => {
-        refetchCode();
+    document.getElementById('used').addEventListener('click', () => {
+        const code = document.getElementById('qrimg').src.replace(baseqrurl, '');
+        fetch(document.URL + 'mark/' + code, {
+            method: "PATCH",
+            body: JSON.stringify({
+                lat: position.coords.latitude,
+                long: position.coords.longitude,
+                userAgent: navigator.userAgent
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(() => {
+            refetchCode();
+        })
     })
 })
