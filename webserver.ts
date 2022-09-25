@@ -21,7 +21,7 @@ function getNearestMcdonalds(lat: string, lon: string) {
     });
 }
 (async () => {
-    const mongo = new MongoManager('mongodb://mongodb:27017');
+    const mongo = new MongoManager('mongodb://mongo:27017');
     await mongo.connect()
 
     const app = expressws(express()).app;
