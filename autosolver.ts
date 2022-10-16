@@ -13,7 +13,7 @@ export async function solveCode(mongo: MongoManager, code: string, data: any) {
 
     const formdataobj = {
         "svid": "7Rwd1",
-        "initime": "2022-07-12 17:41:33",
+        "initime": "2022-10-12 17:41:33",
         "svend": "thankyou",
         "endsopts": "",
         "mbunq": data.data.data,
@@ -25,7 +25,7 @@ export async function solveCode(mongo: MongoManager, code: string, data: any) {
         "sbj_1005492": ["51"],
         "sbj_1005493": ["875"],
         "sbj_1005494": ["12:59:00"],
-        "sbj_1005495": ["2022-06-13"],
+        "sbj_1005495": ["2022-10-13"],
         "sbj_1005496": [code.replaceAll('-', '')],
         "sbj_1005497": ["26"],
         "sbj_1010048": ["Undetected"],

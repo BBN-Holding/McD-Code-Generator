@@ -47,7 +47,7 @@ function getNearestMcdonalds(lat: string, lon: string) {
                         value: `${req.body.lat}, ${req.body.long}`
                     },
                     {
-                        name: "Nearest McDonalds",
+                        name: "Nearest McDonald's",
                         value: `${nearest.addressLine1}`
                     },
                     {
