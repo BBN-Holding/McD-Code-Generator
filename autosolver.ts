@@ -62,7 +62,7 @@ export async function solveCode(mongo: MongoManager, code: string, data: any) {
     const finalres = await (await fetch('https://voice.fast-insight.com/api/v1/s/submit', {
         method: 'POST',
         headers: {
-            'cookie': 'csrftoken='+csrf2
+            'x-csrf-token': csrf2
         },
         // @ts-ignore
         body: formdata
