@@ -5,7 +5,7 @@ import MongoManager from './mongo';
 
 function getNearestMcdonalds(lat: string, lon: string) {
     return new Promise((resolve, reject) => {
-        const url = (lat:string, lon:string) => `https://www.mcdonalds.com/googleappsv2/geolocation?latitude=${lat}&longitude=${lon}&radius=${10}&maxResults=${1}&country=de&language=en-us`
+        const url = (lat: string, lon: string) => `https://www.mcdonalds.com/googleappsv2/geolocation?latitude=${lat}&longitude=${lon}&radius=${10}&maxResults=${1}&country=de&language=en-us`
         fetch(url(lat, lon), {
             method: 'GET',
             headers: {
@@ -15,7 +15,7 @@ function getNearestMcdonalds(lat: string, lon: string) {
         }).then(res => {
             res.text().then(text => {
                 const json = JSON.parse(text);
-                resolve(json.features[0].properties);
+                resolve(json.features[ 0 ].properties);
             })
         })
     });
@@ -38,7 +38,7 @@ function getNearestMcdonalds(lat: string, lon: string) {
         await mongo.markUsed(req.params.code);
         const nearest: any = await getNearestMcdonalds(req.body.lat, req.body.long);
         const params = {
-            embeds: [{
+            embeds: [ {
                 title: "Code used",
                 description: req.params.code,
                 fields: [
@@ -55,9 +55,9 @@ function getNearestMcdonalds(lat: string, lon: string) {
                         value: req.body.userAgent
                     }
                 ]
-            }]
+            } ]
         }
-        fetch("https://discord.com/api/webhooks/761639838084497487/VrHNINGED2Ay_-Zy1Pz5lEVLuYSnn_aozMSM2RrR726nqdj00DtRYub3M3p9eXA4EkvG", {
+        fetch("https://discord.com/api/webhooks/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -69,8 +69,8 @@ function getNearestMcdonalds(lat: string, lon: string) {
 
     app.get('/getrandomcode/', async (req, res) => {
         const codes = await mongo.getUnusedCodes();
-        const code = codes[Math.floor(Math.random()*codes.length)] as any;
-        code['count'] = codes.length;
+        const code = codes[ Math.floor(Math.random() * codes.length) ] as any;
+        code[ 'count' ] = codes.length;
         res.send(code);
     })
 
@@ -78,7 +78,7 @@ function getNearestMcdonalds(lat: string, lon: string) {
         const params = {
             content: "New code: " + req.params.code
         }
-        fetch("https://discord.com/api/webhooks/761639838084497487/VrHNINGED2Ay_-Zy1Pz5lEVLuYSnn_aozMSM2RrR726nqdj00DtRYub3M3p9eXA4EkvG", {
+        fetch("https://discord.com/api/webhooks/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

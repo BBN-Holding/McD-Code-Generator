@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import HttpsProxyAgent from 'https-proxy-agent';
 import fs from 'fs';
 import { MongoManager } from './mongo';
@@ -11,7 +10,7 @@ mongo.connect()
 
 let codeprefixes: string[];
 function generateCode() {
-    const codeprefix = codeprefixes[Math.floor(Math.random() * codeprefixes.length)];
+    const codeprefix = codeprefixes[ Math.floor(Math.random() * codeprefixes.length) ];
     const code = codeprefix + makeid((12 - codeprefix.length));
     return `${code.substring(0, 4)}-${code.substring(4, 8)}-${code.substring(8, 12)}`
 }
@@ -22,7 +21,8 @@ function runCheck(agent: any) {
     const starttime = Date.now();
     fetch(url, {
         method: 'POST',
-        agent: agent,
+        // @ts-ignore
+        agent,
         headers: {
             'Content-Type': 'application/json',
             'cookie': 'csrf=' + csrf
@@ -30,14 +30,14 @@ function runCheck(agent: any) {
         body: generateJson(code, csrf)
     }).then(res => {
         res.json().then(async json => {
-            console.log(code, json, Date.now()-starttime+'ms');
+            console.log(code, json, Date.now() - starttime + 'ms');
             if (json.status === 200) {
                 if (await mongo.checkSurveyCode(code)) {
                     await mongo.insertSurveyCode(code)
                     const params = {
                         content: "Code found: " + code
                     }
-                    fetch("https://discord.com/api/webhooks/761639838084497487/VrHNINGED2Ay_-Zy1Pz5lEVLuYSnn_aozMSM2RrR726nqdj00DtRYub3M3p9eXA4EkvG", {
+                    fetch("https://discord.com/api/webhooks/", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
